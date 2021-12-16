@@ -1,2 +1,114 @@
 #!/usr/bin/env node
-console.log('vuecli-init')
+const path = require('path');
+const program = require('commander');
+const chalk = require('chalk');
+// 如果路径存在则返回 true，否则返回 false。
+const exists = require('fs').existsSync
+// 获取用户主目录的路径 
+const home = require('user-home')
+// 下载 git 仓库
+// const download = require('download-git-repo')
+// 命令行交互
+const inquirer = require('inquirer')
+// loading
+const ora = require('ora')
+
+
+
+
+// 这里直接 vuecli init 不会触发, 会不显示东西，需要继续往下走
+// 只是修改一下帮助信息首行提示
+program
+  .name('你输入vuecli init 没带参数啊！')
+  .usage('<必填模板名 command> [选填项目名 option]')
+  .option('-c, --clone', '使用 git clone')
+  .option('--offline', '用缓存的模板')
+  .parse(process.argv);
+
+// on 自定义事件监听。
+program.on('--help', () => {
+  console.log(program.args, 'program');
+  console.log(' Examples:');
+  console.log();
+  console.log(chalk.gray('    # 用官方模板创建一个新项目'));
+  console.log('    $ vue init webpack my-project');
+  console.log();
+  console.log(chalk.gray('    # 不用官方的'));
+  console.log('    $ vue init username/repo my-project');
+  console.log();
+});
+
+// vue-cli 这里判断了一下 program.args.length (命令数量) 如果用户没有带参数进来的话就弹提示帮助。
+function help() {
+  // vue-cli commander 班本事 @2.9.0 可以在这里执行，我用的是最新的 ^8.3.0 版本，需要跟在 option 后面不可以单独 program.parse(process.argv)
+  // program.parse(process.argv);
+  if (program.args.length < 1) return program.help();
+}
+help();
+
+/* 
+  传了参数后再根据参数进行设置
+*/
+// 拿到的是 vuecli init <参数>
+let template = program.args[0];
+// 判断输入的参数是不是 /xxx 这种的 也就是自定义， 不用官方模板的
+const hasSlash = template.indexOf('/') > -1;
+// 拿的是 vuecli init <> [这里的参数]
+const rawName = program.args[1];
+// [选填参数] 没填或者是 .
+const inPlace = !rawName || rawName === '.';
+// 如果 [选填参数] 没填或者是 '.' 的话就是当前目录的上一级目录的文件名，如果填了就是[选填参数]的值
+// process.cwd() 方法返回 Node.js 进程的当前工作目录。
+const name = inPlace ? path.relative('../', process.cwd()) : rawName;
+// 返回的路径  当前node工作目录 + rawName ? rawName || '.'
+// path.resolve() 方法将路径或路径片段的序列解析为绝对路径。
+const to = path.resolve(rawName || '.');
+
+// 我们设置的参数有一个 -c, --clone
+// 新版的 commander 好像需要通过 opts() 来获取了。
+const clone = program.opts().clone || false;
+
+// 在你的用户主目录路径下加一个 .vue-templats 的隐藏文件路径，后面的路径是你的 第一个必填参数，也就是你的模板名，
+// template.replace(/[\/:]/g, '-') 就是吧你的模板名参数里的 / 替换成 -  防止你传入 'test/demo' 这种参数
+const tmp = path.join(home, '.vue-templates', template.replace(/[\/:]/g, '-'))
+
+// 用缓存的模板 的话就把 .vue-templates 里的模板路径赋值给 template 
+if (program.opts().offline) {
+  console.log(`> Use cached template at ${chalk.yellow(tildify(tmp))}`)
+  template = tmp
+}
+
+// [选填]填没填 ｜｜ to 的路径是否存在
+if (inPlace || exists(to)) {
+  inquirer.prompt([{
+    /* 在这里提问 */
+    type: 'confirm',
+    message: inPlace
+      ? '在当前目录生成项目?'
+      : '目录里有这个文件了，还继续吗',
+    name: 'ok'
+  }]).then(answers => {
+    /* 用户回答提问后 */
+    if (answers.ok) {
+      // run()
+    }
+  }).catch((err) => {
+    // 错误处理
+    // logger.fatal
+  })
+} else {
+  run()
+}
+
+/* 
+  下载并生成项目
+*/
+function run() {
+  // 最后主要通过 generate 进行下载
+  const spinner = ora('下载中.....')
+  spinner.start();
+  setTimeout(() => {
+    spinner.stop()
+    console.log(chalk.cyan('假装下载好了....'))
+  }, 4000);
+}
