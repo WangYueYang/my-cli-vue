@@ -1,0 +1,29 @@
+#!/usr/bin/env node
+
+const program = require('commander');
+
+const version = require('../package.json').version;
+
+// 生命全局变量
+program
+  .version(version)
+  // 修改的是命令行里 Usage 的 name， name 属性也可以从参数中推导出来
+  .name('my-cli-vue')
+  // 修改帮助信息的首行提示
+  .usage('<command> [options]')
+  // 命令, 执行的是 bin 文件下和命令名字对应的文件
+  .command('init', 'my-cli-vue init create new project from vue template')
+  .command('list', 'list templates')
+  .command('build', 'my-vue-cli prototype a new project')
+  .command('create', 'v3 warning only 后面更新')
+  // 获取命令行参数
+  // .argument('<username>', 'your name')
+  // .argument('[username]', 'your name')
+  // 结束后执行的函数
+  // .action((username) => {
+  //   console.log('your name', username);
+  // });
+
+// .parse的第一个参数是要解析的字符串数组，也可以省略参数而使用process.argv。
+
+program.parse(process.argv); // 指明，按 node 约定

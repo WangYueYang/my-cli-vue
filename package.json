@@ -3,5 +3,15 @@
   "version": "1.0.0",
   "description": "A simple CLI for vue-cli",
   "author": "wangyueyang <1632085751@qq.com>",
-  "license": "MIT"
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/WangYueYang/my-cli-vue.git"
+  },
+  "bin": {
+    "vuecli": "bin/vue"
+  },
+  "dependencies": {
+    "commander": "^8.3.0"
+  }
 }
