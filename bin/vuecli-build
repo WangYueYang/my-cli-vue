@@ -1,0 +1,5 @@
+#!/usr/bin/env node
+
+const chalk = require('chalk')
+
+console.log(chalk.blue('这里 vue-cli 2.9 也是只打印了一段话'))

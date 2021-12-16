@@ -1,0 +1,5 @@
+#!/usr/bin/env node
+
+const chalk = require('chalk');
+
+console.log(chalk.cyan('vue-cli 3 版本支持，后面根据 3 版本回来更新'));

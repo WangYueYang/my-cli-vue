@@ -1,0 +1,10 @@
+#!/usr/bin/env node
+
+// chalk 版本先按照 vue-cli 2.9 版本来，后面同步更新
+const chalk = require('chalk');
+
+console.log(`
+  ${chalk.yellow(
+    'vue-cli 2.9.* 版本在这个文件里对 https://api.github.com/users/vuejs-templates/repos 这个接口发了一个请求，把获取到的数据展示了出来，仅此而已。'
+  )}
+`);

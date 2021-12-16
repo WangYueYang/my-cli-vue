@@ -11,7 +11,7 @@ program
   .name('my-cli-vue')
   // 修改帮助信息的首行提示
   .usage('<command> [options]')
-  // 命令, 执行的是 bin 文件下和命令名字对应的文件
+  // 命令, 执行的是 bin 文件下和 主命令-命令名字.文件
   .command('init', 'my-cli-vue init create new project from vue template')
   .command('list', 'list templates')
   .command('build', 'my-vue-cli prototype a new project')
