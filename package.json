@@ -1,0 +1,7 @@
+{
+  "name": "my-cli-vue",
+  "version": "1.0.0",
+  "description": "A simple CLI for vue-cli",
+  "author": "wangyueyang <1632085751@qq.com>",
+  "license": "MIT"
+}
